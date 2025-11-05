@@ -19,8 +19,8 @@
 3. Configuration:
    - **Name**: `login-app-backend`
    - **Root Directory**: `backend`
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
+   - **Build Command**: Leave empty or use `npm install`
+   - **Start Command**: `node server.js`
 4. Environment Variables:
    - `MONGODB_URI`: Your Atlas connection string
    - `NODE_ENV`: `production`
