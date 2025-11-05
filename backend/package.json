@@ -1,0 +1,23 @@
+{
+  "name": "login-backend",
+  "version": "1.0.0",
+  "description": "Backend for login and registration system",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "mongodb": "^6.3.0"
+  }
+}

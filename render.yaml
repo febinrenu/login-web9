@@ -1,0 +1,28 @@
+services:
+  # Backend API Service
+  - type: web
+    name: login-backend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false  # You'll need to set this in Render dashboard
+      - key: FRONTEND_URL
+        sync: false  # You'll need to set this after frontend deployment
+
+  # Frontend Static Site
+  - type: web
+    name: login-frontend
+    env: static
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false  # You'll need to set this after backend deployment
