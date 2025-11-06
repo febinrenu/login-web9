@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
-import { usersCollection } from './database.js';
+import { getUsersCollection, isDbConnected } from './database.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -15,8 +15,13 @@ app.use(express.json());
 
 // Registration endpoint
 app.post('/api/register', async (req, res) => {
+  // Ensure DB is connected
+  if (!isDbConnected()) {
+    return res.status(503).json({ success: false, message: 'Service temporarily unavailable (database not connected)' });
+  }
   try {
     const { fullName, email, username, password } = req.body;
+    const usersCollection = getUsersCollection();
 
     // Validation
     if (!fullName || !email || !username || !password) {
@@ -44,7 +49,7 @@ app.post('/api/register', async (req, res) => {
     }
 
     // Check if username already exists
-    const existingUsername = await usersCollection.findOne({ username });
+  const existingUsername = await usersCollection.findOne({ username });
     if (existingUsername) {
       return res.status(400).json({ 
         success: false, 
@@ -53,7 +58,7 @@ app.post('/api/register', async (req, res) => {
     }
 
     // Check if email already exists
-    const existingEmail = await usersCollection.findOne({ email });
+  const existingEmail = await usersCollection.findOne({ email });
     if (existingEmail) {
       return res.status(400).json({ 
         success: false, 
@@ -91,8 +96,12 @@ app.post('/api/register', async (req, res) => {
 
 // Login endpoint
 app.post('/api/login', async (req, res) => {
+  if (!isDbConnected()) {
+    return res.status(503).json({ success: false, message: 'Service temporarily unavailable (database not connected)' });
+  }
   try {
     const { usernameOrEmail, password } = req.body;
+    const usersCollection = getUsersCollection();
 
     // Validation
     if (!usernameOrEmail || !password) {
@@ -147,7 +156,7 @@ app.post('/api/login', async (req, res) => {
 
 // Test endpoint
 app.get('/api/test', (req, res) => {
-  res.json({ message: 'Backend is running!' });
+  res.json({ message: 'Backend is running!', dbConnected: isDbConnected() });
 });
 
 // Start server
